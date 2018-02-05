@@ -238,4 +238,5 @@ int main()
 	} while (cnt < MAX);
 
 	cout << endl << "各乘客的等待时间总和: " << total << endl;
+	system("pause");
 }

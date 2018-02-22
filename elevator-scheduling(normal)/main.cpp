@@ -226,7 +226,7 @@ int main()
 				op_down();
 			}
 			else if (!dest_num[UP]) {
-				if (dest_time[STOP] * (down_extra * 2 + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
+				if (dest_time[STOP] * (down_extra + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
 					op_down();
 				}
 				else {
@@ -234,7 +234,7 @@ int main()
 				}
 			}
 			else if (!dest_num[DOWN]) {
-				if (dest_time[STOP] * (up_extra * 2 + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
+				if (dest_time[STOP] * (up_extra + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
 					op_up();
 				}
 				else {
@@ -251,7 +251,7 @@ int main()
 			}
 			else {
 				if (dest_time[UP] < dest_time[DOWN]) {
-					if (dest_time[STOP] * (up_extra * 2 + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
+					if (dest_time[STOP] * (up_extra + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
 						op_up();
 					}
 					else {
@@ -259,7 +259,7 @@ int main()
 					}
 				}
 				else {
-					if (dest_time[STOP] * (down_extra * 2 + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
+					if (dest_time[STOP] * (down_extra + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
 						op_down();
 					}
 					else {

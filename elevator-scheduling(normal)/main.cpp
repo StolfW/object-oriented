@@ -91,179 +91,187 @@ void op_stop() // 电梯停靠
 int main()
 {
 	fin.open("input.txt");
-	for (size_t i = 0; i < MAX; i++) { // 输入
-		Passenger& p = passenger[i];
-		fin >> p.request_time >> p.initial_floor >> p.destination;
-	}
-	fin.close();
 	fout.open("output.txt");
-	do
-	{
-		size_t dest_num[3]{ 0 }, dest_time[3]{ 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, 统计三类行动的人数和耗时
-		size_t up_to_floor = 0, down_to_floor = TOP + 1;
-
-		for (size_t i = 0; i < MAX; i++) {
+	for (int T = 1; T <= 5; T++) {
+		timer = 0; // 计时变量
+		now_floor = 1; // 当前楼层
+		cnt = 0; // 计数变量
+		total = 0; // 总时长
+		fout << "==========\n\n" << "第 " << T << " 组数据：\n\n";
+		for (size_t i = 0; i < MAX; i++) { // 输入
 			Passenger& p = passenger[i];
-			size_t* tmp = nullptr;
+			p.is_inside = false;
+			p.waiting_time = 0;
+			fin >> p.request_time >> p.initial_floor >> p.destination;
+		}
+		do
+		{
+			size_t dest_num[3]{ 0 }, dest_time[3]{ 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, 统计三类行动的人数和耗时
+			size_t up_to_floor = 0, down_to_floor = TOP + 1;
 
-			if (p.waiting_time != -1) {
-				if (p.is_inside) {
-					tmp = &p.destination;
-				}
-				else if (p.request_time <= timer) {
-					tmp = &p.initial_floor;
-				}
+			for (size_t i = 0; i < MAX; i++) {
+				Passenger& p = passenger[i];
+				size_t* tmp = nullptr;
 
-				if (tmp != nullptr) {
-					up_to_floor = max(up_to_floor, *tmp);
-					down_to_floor = min(down_to_floor, *tmp);
-
-					if (*tmp > now_floor) {
-						dest_num[UP]++;
+				if (p.waiting_time != -1) {
+					if (p.is_inside) {
+						tmp = &p.destination;
 					}
-					else if (*tmp < now_floor) {
-						dest_num[DOWN]++;
+					else if (p.request_time <= timer) {
+						tmp = &p.initial_floor;
 					}
-					else {
-						dest_num[STOP]++;
+
+					if (tmp != nullptr) {
+						up_to_floor = max(up_to_floor, *tmp);
+						down_to_floor = min(down_to_floor, *tmp);
+
+						if (*tmp > now_floor) {
+							dest_num[UP]++;
+						}
+						else if (*tmp < now_floor) {
+							dest_num[DOWN]++;
+						}
+						else {
+							dest_num[STOP]++;
+						}
 					}
 				}
 			}
-		}
 
-		size_t stop_cnt = 0, up_extra = 0, down_extra = 0;
-		for (size_t i = 0; i < MAX; i++) {
-			Passenger& p = passenger[i];
+			size_t stop_cnt = 0, up_extra = 0, down_extra = 0;
+			for (size_t i = 0; i < MAX; i++) {
+				Passenger& p = passenger[i];
 
-			if (p.waiting_time != -1) {
-				if (dest_num[UP]) {
-					if (p.is_inside) {
-						dest_time[UP] +=
-							abs((int)up_to_floor - (int)now_floor)
-							+ abs((int)up_to_floor - (int)p.destination);
+				if (p.waiting_time != -1) {
+					if (dest_num[UP]) {
+						if (p.is_inside) {
+							dest_time[UP] +=
+								abs((int)up_to_floor - (int)now_floor)
+								+ abs((int)up_to_floor - (int)p.destination);
 
-						if (p.destination != up_to_floor) {
-							dest_time[UP]++;
-						}
-					}
-					else if (p.request_time <= timer) {
-						dest_time[UP] +=
-							abs((int)up_to_floor - (int)now_floor)
-							+ abs((int)up_to_floor - (int)p.initial_floor)
-							+ abs((int)p.destination - (int)p.initial_floor);
-
-						if (p.destination != up_to_floor) {
-							dest_time[UP]++;
-						}
-					}
-				}
-
-				if (dest_num[DOWN]) {
-					if (p.is_inside) {
-						dest_time[DOWN] +=
-							abs((int)down_to_floor - (int)now_floor)
-							+ abs((int)down_to_floor - (int)p.destination);
-
-						if (p.destination != down_to_floor) {
-							dest_time[DOWN]++;
-						}
-					}
-					else if (p.request_time <= timer) {
-						dest_time[DOWN] +=
-							abs((int)down_to_floor - (int)now_floor)
-							+ abs((int)down_to_floor - (int)p.initial_floor)
-							+ abs((int)p.destination - (int)p.initial_floor);
-
-						if (p.destination != down_to_floor) {
-							dest_time[DOWN]++;
-						}
-					}
-				}
-
-				if (dest_num[STOP]) {
-					if (p.is_inside) {
-						if (p.destination != now_floor) {
-							dest_time[STOP]++;
-						}
-						else {
-							stop_cnt++;
-						}
-					}
-					else if (p.request_time <= timer) {
-						if (p.initial_floor != now_floor) {
-							//dest_time[STOP]++;
-						}
-						else {
-							stop_cnt++;
-							if (p.destination < now_floor) {
-								up_extra = now_floor - p.destination;
+							if (p.destination != up_to_floor) {
+								dest_time[UP]++;
 							}
-							else if (p.destination > now_floor) {
-								down_extra = p.destination - now_floor;
+						}
+						else if (p.request_time <= timer) {
+							dest_time[UP] +=
+								abs((int)up_to_floor - (int)now_floor)
+								+ abs((int)up_to_floor - (int)p.initial_floor)
+								+ abs((int)p.destination - (int)p.initial_floor);
+
+							if (p.destination != up_to_floor) {
+								dest_time[UP]++;
 							}
 						}
 					}
-				}
-			}
-		}
 
-		if (!dest_num[UP] && !dest_num[DOWN] && !dest_num[STOP]) {
-			timer++;
-		}
-		else if (!dest_num[UP] && !dest_num[DOWN]) {
-			op_stop();
-		}
-		else if (!dest_num[STOP] && !dest_num[DOWN]) {
-			op_up();
-		}
-		else if (!dest_num[UP] && !dest_num[STOP]) {
-			op_down();
-		}
-		else if (!dest_num[UP]) {
-			if (dest_time[STOP] * (down_extra + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
-				op_down();
+					if (dest_num[DOWN]) {
+						if (p.is_inside) {
+							dest_time[DOWN] +=
+								abs((int)down_to_floor - (int)now_floor)
+								+ abs((int)down_to_floor - (int)p.destination);
+
+							if (p.destination != down_to_floor) {
+								dest_time[DOWN]++;
+							}
+						}
+						else if (p.request_time <= timer) {
+							dest_time[DOWN] +=
+								abs((int)down_to_floor - (int)now_floor)
+								+ abs((int)down_to_floor - (int)p.initial_floor)
+								+ abs((int)p.destination - (int)p.initial_floor);
+
+							if (p.destination != down_to_floor) {
+								dest_time[DOWN]++;
+							}
+						}
+					}
+
+					if (dest_num[STOP]) {
+						if (p.is_inside) {
+							if (p.destination != now_floor) {
+								dest_time[STOP]++;
+							}
+							else {
+								stop_cnt++;
+							}
+						}
+						else if (p.request_time <= timer) {
+							if (p.initial_floor != now_floor) {
+								//dest_time[STOP]++;
+							}
+							else {
+								stop_cnt++;
+								if (p.destination < now_floor) {
+									up_extra = now_floor - p.destination;
+								}
+								else if (p.destination > now_floor) {
+									down_extra = p.destination - now_floor;
+								}
+							}
+						}
+					}
+				}
 			}
-			else {
+			if (!dest_num[UP] && !dest_num[DOWN] && !dest_num[STOP]) {
+				timer++;
+			}
+			else if (!dest_num[UP] && !dest_num[DOWN]) {
 				op_stop();
 			}
-		}
-		else if (!dest_num[DOWN]) {
-			if (dest_time[STOP] * (up_extra + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
+			else if (!dest_num[STOP] && !dest_num[DOWN]) {
 				op_up();
 			}
-			else {
-				op_stop();
-			}
-		}
-		else if (!dest_num[STOP]) {
-			if (dest_time[UP] < dest_time[DOWN]) {
-				op_up();
-			}
-			else {
+			else if (!dest_num[UP] && !dest_num[STOP]) {
 				op_down();
 			}
-		}
-		else {
-			if (dest_time[UP] < dest_time[DOWN]) {
-				if (dest_time[STOP] * (up_extra + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
-					op_up();
-				}
-				else {
-					op_stop();
-				}
-			}
-			else {
-				if (dest_time[STOP] * (down_extra + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
+			else if (!dest_num[UP]) {
+				if (dest_time[STOP] * (down_extra * 2 + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
 					op_down();
 				}
 				else {
 					op_stop();
 				}
 			}
-		}
-	} while (cnt < MAX); // 是否所有乘客抵达
-
-	fout << endl << "各乘客的等待时间总和: " << total << endl;
+			else if (!dest_num[DOWN]) {
+				if (dest_time[STOP] * (up_extra * 2 + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
+					op_up();
+				}
+				else {
+					op_stop();
+				}
+			}
+			else if (!dest_num[STOP]) {
+				if (dest_time[UP] < dest_time[DOWN]) {
+					op_up();
+				}
+				else {
+					op_down();
+				}
+			}
+			else {
+				if (dest_time[UP] < dest_time[DOWN]) {
+					if (dest_time[STOP] * (up_extra * 2 + 1) > stop_cnt * ((abs((int)up_to_floor - (int)now_floor)) * 2 + 1)) {
+						op_up();
+					}
+					else {
+						op_stop();
+					}
+				}
+				else {
+					if (dest_time[STOP] * (down_extra * 2 + 1) > stop_cnt * ((abs((int)down_to_floor - (int)now_floor)) * 2 + 1)) {
+						op_down();
+					}
+					else {
+						op_stop();
+					}
+				}
+			}
+		} while (cnt < MAX); // 是否所有乘客抵达
+		fout << endl << "各乘客的等待时间总和: " << total << endl << endl;
+	}
+	fout << "==========\n";
+	fin.close();
 	fout.close();
 	system("pause");
 }

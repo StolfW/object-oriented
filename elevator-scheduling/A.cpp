@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <cmath>
 using namespace std;
 
@@ -240,5 +240,4 @@ int main()
 	} while (cnt < MAX); // 是否所有乘客抵达
 
 	cout << endl << "各乘客的等待时间总和: " << total << endl;
-	system("pause");
 }

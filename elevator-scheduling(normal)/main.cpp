@@ -273,5 +273,4 @@ int main()
 	fout << "==========\n";
 	fin.close();
 	fout.close();
-	system("pause");
 }

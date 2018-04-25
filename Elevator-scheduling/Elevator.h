@@ -6,7 +6,7 @@
 #include "Passenger.h"
 
 enum Indicator {
-	UP, DOWN, STOP
+	UP, DOWN, STOP, NONE
 };
 
 class Elevator {

@@ -48,8 +48,11 @@ void Elevator::Execute(Indicator indicator) {
 	else if (indicator == DOWN) {
 		goToFloor(currentFloor - 1);
 	}
-	else {
+	else if (indicator == STOP){
 		stop();
+	}
+	else {
+		timer++;
 	}
 }
 

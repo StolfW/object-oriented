@@ -119,7 +119,7 @@ Indicator Strategy::decisionMaking() {
 		}
 	}
 	if (!dest_num[UP] && !dest_num[DOWN] && !dest_num[STOP]) {
-		return STOP;
+		return NONE;
 	}
 	else if (!dest_num[UP] && !dest_num[DOWN]) {
 		return STOP;

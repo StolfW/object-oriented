@@ -41,6 +41,14 @@ void Elevator::stop() {
 	timer++;
 }
 
+void Elevator::addPassenger(const Passenger& pass) {
+	passengers.push_back(pass);
+}
+
+bool Elevator::isAllAchieved() const {
+	return this->achievedPassenger >= int(passengers.size());
+}
+
 void Elevator::Execute(Indicator indicator) {
 	if (indicator == UP) {
 		goToFloor(currentFloor + 1);
@@ -54,6 +62,22 @@ void Elevator::Execute(Indicator indicator) {
 	else {
 		timer++;
 	}
+}
+
+int Elevator::getMaxFloor() const {
+	return this->maxFloor;
+}
+
+int Elevator::getTimer() const {
+	return this->timer;
+}
+
+int Elevator::getCurrentFloor() const {
+	return this->currentFloor;
+}
+
+const std::vector<Passenger>& Elevator::getPassengers() const {
+	return this->passengers;
 }
 
 std::ostream  &operator<< (std::ostream &os, Elevator &ele)

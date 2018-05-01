@@ -9,9 +9,10 @@ public:
 
 	Indicator decisionMaking();
 
-	const Elevator* elevator;
+	void setElevator(const Elevator*);
 
 private:
 	Strategy() {};
+	const Elevator* elevator;
 	static Strategy* instance;
 };

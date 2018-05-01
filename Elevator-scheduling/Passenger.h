@@ -1,8 +1,7 @@
 #pragma once
 #include <iostream>
 
-class Passenger { // 存储乘客信息
-public:
+struct Passenger { // 存储乘客信息
 	Passenger() : isInside(false), isAchieved(false), waitingTime(0) { }
 	int requestTime; // 请求时刻
 	int initialFloor; // 起始楼层

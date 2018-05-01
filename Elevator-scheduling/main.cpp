@@ -16,12 +16,12 @@ int main() {
 	for (int i = 0; i < N; i++) {
 		Passenger pass;
 		fin >> pass;
-		elevator.passengers.push_back(pass);
+		elevator.addPassenger(pass);
 	}
 	do {
-		Strategy::getInstance()->elevator = &elevator;
+		Strategy::getInstance()->setElevator(&elevator);
 		elevator.Execute(Strategy::getInstance()->decisionMaking());
-	} while (elevator.achievedPassenger < N);
+	} while (!elevator.isAllAchieved());
 	fout << elevator;
 	fin.close();
 	fout.close();

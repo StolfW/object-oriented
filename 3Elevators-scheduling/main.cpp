@@ -15,15 +15,15 @@ int main() {
 	Elevator* elevator = new Elevator(maxFloor);
 	OddElevator* oddElevator = new OddElevator(maxFloor);
 	EvenElevator* evenElevator = new EvenElevator(maxFloor);
-	RUN->addElevator(elevator); // Ìí¼ÓµçÌÝ
+	RUN->addElevator(elevator); // æ·»åŠ ç”µæ¢¯
 	RUN->addElevator(oddElevator);
 	RUN->addElevator(evenElevator);
 	for (int i = 0; i < N; i++) {
 		Passenger *pass = new Passenger;
 		fin >> *pass;
-		RUN->addPassenger(pass); // Ìí¼Ó³Ë¿Í
+		RUN->addPassenger(pass); // æ·»åŠ ä¹˜å®¢
 	}
-	do { // µçÌÝµ÷¶È
+	do { // ç”µæ¢¯è°ƒåº¦
 		RUN->schedule();
 		RUN->execute();
 	} while (!RUN->allArrived());

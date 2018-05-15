@@ -5,7 +5,7 @@
 class Scheduling {
 public:
 	static Scheduling* getInstance();
-	void schedule(); // ½øĞĞ¾ö²ß
+	void schedule(); // è¿›è¡Œå†³ç­–
 	Indicator decisionMaking(const Elevator*);
 	void execute();
 
@@ -13,10 +13,10 @@ public:
 	void clearElevator();
 	void clearPassenger();
 
-	void addElevator(Elevator*); // Ìí¼ÓµçÌİ
-	void addPassenger(Passenger*); // Ìí¼Ó³Ë¿Í
+	void addElevator(Elevator*); // æ·»åŠ ç”µæ¢¯
+	void addPassenger(Passenger*); // æ·»åŠ ä¹˜å®¢
 
-	bool allArrived() const; // ÊÇ·ñÍê³Éµ÷¶È
+	bool allArrived() const; // æ˜¯å¦å®Œæˆè°ƒåº¦
 	int getArrivalNumber() const;
 
 	static int timer;
@@ -25,8 +25,8 @@ private:
 	Scheduling() { };
 	static Scheduling* instance;
 
-	std::vector<Elevator*> elevators; // µçÌİÃÇ
-	std::vector<Passenger*> passengers; // ³Ë¿ÍÃÇ
+	std::vector<Elevator*> elevators; // ç”µæ¢¯ä»¬
+	std::vector<Passenger*> passengers; // ä¹˜å®¢ä»¬
 };
 
 static int cmpTarget = 0;

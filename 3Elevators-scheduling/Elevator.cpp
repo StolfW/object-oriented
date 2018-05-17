@@ -16,7 +16,7 @@ void Elevator::stop() {
 			(*it)->setInside();
 			it++;
 		}
-		else if ((*it)->getTerminalFloor() == this->currentFloor) { // �Ƿ�ִ�Ŀ�ĵ�
+		else if ((*it)->getTerminalFloor() == this->currentFloor) { // 是否抵达目的地
 			(*it)->setArrived();
 			it = this->insider.erase(it);
 		}

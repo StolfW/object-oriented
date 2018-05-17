@@ -15,12 +15,12 @@ class Elevator {
 public:
 	Elevator(const int& maxFloor) : maxFloor(maxFloor), currentFloor(1), status(NONE) { }
 
-	void up(); // ÉÏÉı
-	void down(); // ÏÂ½µ
-	void stop(); // Í£¿¿
-	void idle(); // ÏĞÖÃ
+	void up(); // ä¸Šå‡
+	void down(); // ä¸‹é™
+	void stop(); // åœé 
+	void idle(); // é—²ç½®
 
-	void pushPassenger(Passenger*); // ·ÖÅä³Ë¿Í
+	void pushPassenger(Passenger*); // åˆ†é…ä¹˜å®¢
 	void pushOperation(const int&); // 
 
 	int getMaxFloor() const;
@@ -28,18 +28,18 @@ public:
 	const std::vector<Passenger*>& getInsider() const;
 	Indicator getStatus() const;
 
-	virtual bool availableInFloor(int); // ÅĞ¶Ï¿ÉÍ£¿¿Â¥²ã
+	virtual bool availableInFloor(int); // åˆ¤æ–­å¯åœé æ¥¼å±‚
 	virtual std::string type() const;
 	virtual void outputPosition(const int& timer) const;
 
 protected:
-	int maxFloor; // ×î´óÂ¥²ã
-	int currentFloor; // µ±Ç°Î»ÖÃ
-	Indicator status; // µ±Ç°ÔËĞĞ×´Ì¬£¨ÉÏ»òÏÂ£©
+	int maxFloor; // æœ€å¤§æ¥¼å±‚
+	int currentFloor; // å½“å‰ä½ç½®
+	Indicator status; // å½“å‰è¿è¡ŒçŠ¶æ€ï¼ˆä¸Šæˆ–ä¸‹ï¼‰
 
-	std::vector<Passenger*> insider; // ÒÑ±»·ÖÅä¸øµçÌİµÄ³Ë¿Í
+	std::vector<Passenger*> insider; // å·²è¢«åˆ†é…ç»™ç”µæ¢¯çš„ä¹˜å®¢
 
-	std::vector<std::pair<int, int>> operations; // µçÌİÔËĞĞĞòÁĞ
+	std::vector<std::pair<int, int>> operations; // ç”µæ¢¯è¿è¡Œåºåˆ—
 
 	friend std::ostream &operator<< (std::ostream&, const Elevator&);
 };

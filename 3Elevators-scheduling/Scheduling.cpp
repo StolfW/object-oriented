@@ -40,7 +40,7 @@ void Scheduling::schedule() {
 			}
 		}
 		else {
-			break; // 保证请求时刻单调不减
+			break; // 淇濊瘉璇锋眰鏃跺埢鍗曡皟涓嶅噺
 		}
 	}
 }
@@ -49,7 +49,7 @@ Indicator Scheduling::decisionMaking(const Elevator* elevator) {
 	const int currentFloor = elevator->getCurrentFloor();
 	const std::vector<Passenger*>& passengers = elevator->getInsider();
 
-	int dest[3] = { 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, 统计三类行动的人数和耗时
+	int dest[3] = { 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, 缁熻涓夌被琛屽姩鐨勪汉鏁板拰鑰楁椂
 
 	for (std::vector<Passenger*>::const_iterator it = passengers.begin(); it != passengers.end(); it++) {
 		const int initialFloor = (*it)->getInitialFloor();

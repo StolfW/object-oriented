@@ -5,7 +5,7 @@
 class Scheduling {
 public:
 	static Scheduling* getInstance();
-	void schedule(); // è¿›è¡Œå†³ç­–
+	void schedule(); // ½øĞĞ¾ö²ß
 	Indicator decisionMaking(const Elevator*);
 	void execute();
 
@@ -13,10 +13,10 @@ public:
 	void clearElevator();
 	void clearPassenger();
 
-	void addElevator(Elevator*); // æ·»åŠ ç”µæ¢¯
-	void addPassenger(Passenger*); // æ·»åŠ ä¹˜å®¢
+	void addElevator(Elevator*); // Ìí¼ÓµçÌİ
+	void addPassenger(Passenger*); // Ìí¼Ó³Ë¿Í
 
-	bool allArrived() const; // æ˜¯å¦å®Œæˆè°ƒåº¦
+	bool allArrived() const; // ÊÇ·ñÍê³Éµ÷¶È
 	int getArrivalNumber() const;
 
 	static int timer;
@@ -25,9 +25,14 @@ private:
 	Scheduling() { };
 	static Scheduling* instance;
 
-	std::vector<Elevator*> elevators; // ç”µæ¢¯ä»¬
-	std::vector<Passenger*> passengers; // ä¹˜å®¢ä»¬
+	std::vector<Elevator*> elevators; // µçÌİÃÇ
+	//std::vector<Elevator*> ascenders; // ÉÏÉıµÄµçÌİ
+	//std::vector<Elevator*> descenders; // ÏÂ½µµÄµçÌİ
+	//std::vector<Elevator*> idlers; // ¿ÕÏĞµÄµçÌİ
+
+	std::vector<Passenger*> passengers; // ´ı´¦ÀíµÄ³Ë¿ÍÃÇ
+	std::vector<Passenger*> arrivals; // ÒÑµ½´ïµÄ³Ë¿ÍÃÇ;
 };
 
-static int cmpTarget = 0;
+//static int cmpTarget = 0;
 bool compare(const Elevator*, const Elevator*);

@@ -1,7 +1,7 @@
 #include "EvenElevator.h"
 
 bool EvenElevator::availableInFloor(int floor) {
-	return floor > 0 && floor <= maxFloor && (floor == 1 || !(floor & 1));
+	return floor > 0 && floor <= this->maxFloor && (floor == 1 || !(floor & 1));
 }
 
 std::string EvenElevator::type() const {
@@ -10,6 +10,6 @@ std::string EvenElevator::type() const {
 
 void EvenElevator::outputPosition(const int& timer) const {
 	std::cout << std::endl;
-	std::cout << timer << " : EvenElevator at Floor " << currentFloor;
+	std::cout << timer << " : EvenElevator at Floor " << this->currentFloor;
 	std::cout << std::endl;
 }

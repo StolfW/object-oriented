@@ -9,20 +9,30 @@ Scheduling* Scheduling::instance = new Scheduling();
 int Scheduling::timer = 0;
 
 bool compare(const Elevator* a, const Elevator* b) {
-	return a->getInsider().size() == b->getInsider().size()
+	/*return a->getInsider().size() && b->getInsider().size()
 		? abs(a->getCurrentFloor() - cmpTarget) < abs(b->getCurrentFloor() - cmpTarget) 
-		: a->getInsider().size() < b->getInsider().size();
+		: a->getInsider().size() < b->getInsider().size();*/
+	return a->getInsider().size() < b->getInsider().size();
 }
 
 void Scheduling::schedule() {
-	for (std::vector<Passenger*>::iterator pIt = passengers.begin(); pIt != passengers.end(); pIt++) {
+	for (std::vector<Passenger*>::iterator pIt = this->passengers.begin(); pIt != this->passengers.end(); pIt++) {
 		if ((*pIt)->assigned()) {
-			continue;
+			if ((*pIt)->arrived()) {
+				this->arrivals.push_back(*pIt);
+				pIt = this->passengers.erase(pIt);
+				if (pIt == this->passengers.end()) {
+					break;
+				}
+			}
+			else {
+				continue;
+			}
 		}
 		if ((*pIt)->getRequestTime() <= timer) {
-			cmpTarget = (*pIt)->getInitialFloor();
-			std::sort(elevators.begin(), elevators.end(), compare);
-			for (std::vector<Elevator*>::iterator eIt = elevators.begin(); eIt != elevators.end(); eIt++) {
+			//cmpTarget = (*pIt)->getInitialFloor();
+			std::sort(this->elevators.begin(), this->elevators.end(), compare);
+			for (std::vector<Elevator*>::iterator eIt = this->elevators.begin(); eIt != this->elevators.end(); eIt++) {
 				if ((*eIt)->availableInFloor((*pIt)->getInitialFloor()) && (*eIt)->availableInFloor((*pIt)->getTerminalFloor())) {
 					(*eIt)->pushPassenger(*pIt);
 					break;
@@ -30,18 +40,16 @@ void Scheduling::schedule() {
 			}
 		}
 		else {
-			break; // 淇濊瘉璇锋眰鏃跺埢鍗曡皟涓嶅噺
+			break; // 保证请求时刻单调不减
 		}
 	}
 }
 
 Indicator Scheduling::decisionMaking(const Elevator* elevator) {
-	const int maxFloor = elevator->getMaxFloor();
 	const int currentFloor = elevator->getCurrentFloor();
 	const std::vector<Passenger*>& passengers = elevator->getInsider();
 
-	int dest_num[3]{ 0 }, dest_time[3]{ 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, 缁熻涓夌被琛屽姩鐨勪汉鏁板拰鑰楁椂
-	int up_to_floor = -1, down_to_floor = maxFloor;
+	int dest[3] = { 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, 统计三类行动的人数和耗时
 
 	for (std::vector<Passenger*>::const_iterator it = passengers.begin(); it != passengers.end(); it++) {
 		const int initialFloor = (*it)->getInitialFloor();
@@ -56,80 +64,40 @@ Indicator Scheduling::decisionMaking(const Elevator* elevator) {
 			}
 
 			if (tmp != nullptr) {
-				up_to_floor = std::max(up_to_floor, *tmp);
-				down_to_floor = std::min(down_to_floor, *tmp);
-
 				if (*tmp > currentFloor) {
-					dest_num[UP]++;
+					dest[UP]++;
 				}
 				else if (*tmp < currentFloor) {
-					dest_num[DOWN]++;
+					dest[DOWN]++;
 				}
 				else {
-					dest_num[STOP]++;
+					dest[STOP]++;
 				}
 			}
 		}
 	}
-
-	for (std::vector<Passenger*>::const_iterator it = passengers.begin(); it != passengers.end(); it++) {
-		const int initialFloor = (*it)->getInitialFloor();
-		const int terminalFloor = (*it)->getTerminalFloor();
-
-		if (!(*it)->arrived()) {
-			if (dest_num[UP]) {
-				if ((*it)->inside()) {
-					dest_time[UP] += abs(up_to_floor - currentFloor) + abs(up_to_floor - terminalFloor);
-					if (terminalFloor != up_to_floor) {
-						dest_time[UP]++;
-					}
-				}
-				else {
-					dest_time[UP] += abs(up_to_floor - currentFloor) + abs(up_to_floor - initialFloor) + abs(terminalFloor - initialFloor);
-					if (terminalFloor != up_to_floor) {
-						dest_time[UP]++;
-					}
-				}
-			}
-
-			if (dest_num[DOWN]) {
-				if ((*it)->inside()) {
-					dest_time[DOWN] += abs(down_to_floor - currentFloor) + abs(down_to_floor - terminalFloor);
-					if (terminalFloor != down_to_floor) {
-						dest_time[DOWN]++;
-					}
-				}
-				else {
-					dest_time[DOWN] += abs(down_to_floor - currentFloor) + abs(down_to_floor - initialFloor) + abs(terminalFloor - initialFloor);
-					if (terminalFloor != down_to_floor) {
-						dest_time[DOWN]++;
-					}
-				}
-			}
-		}
-	}
-	if (!dest_num[UP] && !dest_num[DOWN] && !dest_num[STOP]) {
+	if (!dest[UP] && !dest[DOWN] && !dest[STOP]) {
 		return NONE;
 	}
-	else if (!dest_num[UP] && !dest_num[DOWN]) {
+	else if (!dest[UP] && !dest[DOWN]) {
 		return STOP;
 	}
-	else if (!dest_num[STOP] && !dest_num[DOWN]) {
+	else if (!dest[STOP] && !dest[DOWN]) {
 		return UP;
 	}
-	else if (!dest_num[UP] && !dest_num[STOP]) {
+	else if (!dest[UP] && !dest[STOP]) {
 		return DOWN;
 	}
-	else if (!dest_num[UP]) {
+	else if (!dest[UP]) {
 		return STOP;
 	}
-	else if (!dest_num[DOWN]) {
+	else if (!dest[DOWN]) {
 		return STOP;
 	}
-	else if (!dest_num[STOP]) {
+	else if (!dest[STOP]) {
 		Indicator status = elevator->getStatus();
-		if (status == NONE || status == STOP) {
-			if (dest_time[UP] < dest_time[DOWN]) {
+		if (status == NONE) {
+			if (dest[UP]) {
 				return UP;
 			}
 			else {
@@ -146,8 +114,8 @@ Indicator Scheduling::decisionMaking(const Elevator* elevator) {
 }
 
 void Scheduling::execute() {
-	for (Elevator* elevator : elevators) {
-		switch (decisionMaking(elevator)) {
+	for (Elevator* elevator : this->elevators) {
+		switch (this->decisionMaking(elevator)) {
 		case STOP:
 			elevator->stop();
 			elevator->pushOperation(timer);
@@ -170,22 +138,22 @@ void Scheduling::execute() {
 }
 
 void Scheduling::clear() {
-	clearElevator();
-	clearPassenger();
+	this->clearElevator();
+	this->clearPassenger();
 }
 
 void Scheduling::clearElevator() {
-	for (std::vector<Elevator*>::iterator it = elevators.begin(); it != elevators.end(); it++) {
+	for (std::vector<Elevator*>::iterator it = this->elevators.begin(); it != this->elevators.end(); it++) {
 		delete *it;
 	}
-	elevators.clear();
+	this->elevators.clear();
 }
 
 void Scheduling::clearPassenger() {
-	for (std::vector<Passenger*>::iterator it = passengers.begin(); it != passengers.end(); it++) {
+	for (std::vector<Passenger*>::iterator it = this->passengers.begin(); it != this->passengers.end(); it++) {
 		delete *it;
 	}
-	passengers.clear();
+	this->passengers.clear();
 }
 
 void Scheduling::addElevator(Elevator* ele) {
@@ -197,13 +165,10 @@ void Scheduling::addPassenger(Passenger* pass) {
 }
 
 bool Scheduling::allArrived() const {
-	return getArrivalNumber() == passengers.size();
+	//std::cout << getArrivalNumber() << std::endl;
+	return !this->passengers.size();
 }
 
 int Scheduling::getArrivalNumber() const {
-	int arrival = 0;
-	for (std::vector<Elevator*>::const_iterator it = elevators.begin(); it != elevators.end(); it++) {
-		arrival += (*it)->getArrivalNumber();
-	}
-	return arrival;
+	return this->arrivals.size();
 }

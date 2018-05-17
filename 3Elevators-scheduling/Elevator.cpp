@@ -1,26 +1,24 @@
 #include "Elevator.h"
 
 void Elevator::up() {
-	status = UP;
-	currentFloor++;
+	this->status = UP;
+	this->currentFloor++;
 }
 
 void Elevator::down() {
-	status = DOWN;
-	currentFloor--;
+	this->status = DOWN;
+	this->currentFloor--;
 }
 
 void Elevator::stop() {
-	status = STOP;
-	for (std::vector<Passenger*>::iterator it = insider.begin(); it != insider.end(); ) {
-		if ((*it)->getInitialFloor() == currentFloor) {
+	for (std::vector<Passenger*>::iterator it = this->insider.begin(); it != this->insider.end(); ) {
+		if ((*it)->getInitialFloor() == this->currentFloor) {
 			(*it)->setInside();
 			it++;
 		}
-		else if ((*it)->getTerminalFloor() == currentFloor) { // 是否抵达目的地
+		else if ((*it)->getTerminalFloor() == this->currentFloor) { // �Ƿ�ִ�Ŀ�ĵ�
 			(*it)->setArrived();
-			arrivalNumber++;
-			it = insider.erase(it);
+			it = this->insider.erase(it);
 		}
 		else {
 			it++;
@@ -29,7 +27,7 @@ void Elevator::stop() {
 }
 
 void Elevator::idle() {
-	status = NONE;
+	this->status = NONE;
 }
 
 void Elevator::pushPassenger(Passenger* pass) {
@@ -49,10 +47,6 @@ int Elevator::getCurrentFloor() const {
 	return this->currentFloor;
 }
 
-int Elevator::getArrivalNumber() const {
-	return this->arrivalNumber;
-}
-
 const std::vector<Passenger*>& Elevator::getInsider() const {
 	return this->insider;
 }
@@ -62,7 +56,7 @@ Indicator Elevator::getStatus() const {
 }
 
 bool Elevator::availableInFloor(int floor) {
-	return floor > 0 && floor <= maxFloor;
+	return floor > 0 && floor <= this->maxFloor;
 }
 
 std::string Elevator::type() const {
@@ -71,7 +65,7 @@ std::string Elevator::type() const {
 
 void Elevator::outputPosition(const int& timer) const {
 	std::cout << std::endl;
-	std::cout << timer << " : Elevator at Floor " << currentFloor;
+	std::cout << timer << " : Elevator at Floor " << this->currentFloor;
 	std::cout << std::endl;
 }
 

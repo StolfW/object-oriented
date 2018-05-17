@@ -5,7 +5,7 @@ class EvenElevator : public Elevator {
 public:
 	EvenElevator(const int& maxFloor) : Elevator(maxFloor) { }
 
-	virtual bool availableInFloor(int); // åˆ¤æ–­å¯åœé æ¥¼å±‚
+	virtual bool availableInFloor(int); // ÅĞ¶Ï¿ÉÍ£¿¿Â¥²ã
 	virtual std::string type() const;
 	virtual void outputPosition(const int& timer) const;
 

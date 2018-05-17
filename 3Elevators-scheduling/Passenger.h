@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-class Passenger{ // å­˜å‚¨ä¹˜å®¢ä¿¡æ¯
+class Passenger{ // ´æ´¢³Ë¿ÍÐÅÏ¢
 public:
 	Passenger() : isInside(false), isArrived(false), isAssigned(false) { }
 	int getRequestTime() const;
@@ -15,11 +15,11 @@ public:
 	void setAssigned();
 
 private:
-	int requestTime; // è¯·æ±‚æ—¶åˆ»
-	int initialFloor; // èµ·å§‹æ¥¼å±‚
-	int terminalFloor; // åŽ»å¾€æ¥¼å±‚
-	bool isInside; // æ˜¯å¦åœ¨ç”µæ¢¯å†…
-	bool isArrived; // æ˜¯å¦åˆ°è¾¾ç›®çš„åœ°
-	bool isAssigned; // æ˜¯å¦å·²åˆ†é…ç»™ç”µæ¢¯
+	int requestTime; // ÇëÇóÊ±¿Ì
+	int initialFloor; // ÆðÊ¼Â¥²ã
+	int terminalFloor; // È¥ÍùÂ¥²ã
+	bool isInside; // ÊÇ·ñÔÚµçÌÝÄÚ
+	bool isArrived; // ÊÇ·ñµ½´ïÄ¿µÄµØ
+	bool isAssigned; // ÊÇ·ñÒÑ·ÖÅä¸øµçÌÝ
 	friend std::istream &operator>> (std::istream&, Passenger&);
 };

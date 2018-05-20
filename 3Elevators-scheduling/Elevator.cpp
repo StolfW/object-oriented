@@ -12,11 +12,11 @@ void Elevator::down() {
 
 void Elevator::stop() {
 	for (std::vector<Passenger*>::iterator it = this->insider.begin(); it != this->insider.end(); ) {
-		if (!(*it)->inside() && (*it)->getInitialFloor() == this->currentFloor) { // ÊÇ·ñµÖ´ï³Ë¿ÍÆðµã²ã
+		if (!(*it)->inside() && (*it)->getInitialFloor() == this->currentFloor) { // æ˜¯å¦æŠµè¾¾ä¹˜å®¢èµ·ç‚¹å±‚
 			(*it)->setInside();
 			it++;
 		}
-		else if ((*it)->inside() && (*it)->getTerminalFloor() == this->currentFloor) { // ÊÇ·ñµÖ´ïÄ¿µÄµØ
+		else if ((*it)->inside() && (*it)->getTerminalFloor() == this->currentFloor) { // æ˜¯å¦æŠµè¾¾ç›®çš„åœ°
 			(*it)->setArrived();
 			it = this->insider.erase(it);
 		}

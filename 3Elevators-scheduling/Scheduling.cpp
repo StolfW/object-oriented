@@ -61,7 +61,7 @@ void Scheduling::assignment() {
 			pIt++;
 		}
 		else {
-			break; // ±£Ö¤ÇëÇóÊ±¿Ìµ¥µ÷²»¼õ
+			break; // ä¿è¯è¯·æ±‚æ—¶åˆ»å•è°ƒä¸å‡
 		}
 	}
 }
@@ -92,7 +92,7 @@ Indicator Scheduling::schedulingMaking(const Elevator* elevator) {
 	const int maxFloor = elevator->getMaxFloor();
 	const std::vector<Passenger*>& passengers = elevator->getInsider();
 
-	int dest[3] = { 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, Í³¼ÆÈıÀàĞĞ¶¯µÄÈËÊı
+	int dest[3] = { 0 }; // 0 - UP, 1 - DOWN, 2 - STOP, ç»Ÿè®¡ä¸‰ç±»è¡ŒåŠ¨çš„äººæ•°
 	int upToMax = 0, downToMin = maxFloor + 1;
 
 	for (Passenger* passenger : passengers) {

@@ -10,6 +10,6 @@ std::string EvenElevator::type() const {
 
 void EvenElevator::outputPosition(const int& timer) const {
 	std::cout << std::endl;
-	std::cout << timer << " : EvenElevator at Floor " << this->currentFloor;
+	std::cout << "At time " << timer << ", EvenElevator at Floor " << this->currentFloor << "\nStatus: " << this->status;
 	std::cout << std::endl;
 }

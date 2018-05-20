@@ -12,11 +12,11 @@ void Elevator::down() {
 
 void Elevator::stop() {
 	for (std::vector<Passenger*>::iterator it = this->insider.begin(); it != this->insider.end(); ) {
-		if ((*it)->getInitialFloor() == this->currentFloor) {
+		if (!(*it)->inside() && (*it)->getInitialFloor() == this->currentFloor) { // ÊÇ·ñµÖ´ï³Ë¿ÍÆðµã²ã
 			(*it)->setInside();
 			it++;
 		}
-		else if ((*it)->getTerminalFloor() == this->currentFloor) { // æ˜¯å¦æŠµè¾¾ç›®çš„åœ°
+		else if ((*it)->inside() && (*it)->getTerminalFloor() == this->currentFloor) { // ÊÇ·ñµÖ´ïÄ¿µÄµØ
 			(*it)->setArrived();
 			it = this->insider.erase(it);
 		}
@@ -36,7 +36,7 @@ void Elevator::pushPassenger(Passenger* pass) {
 }
 
 void Elevator::pushOperation(const int& timer) {
-	this->operations.push_back(std::make_pair(timer, currentFloor));
+	this->operations.push_back(std::make_pair(timer, this->currentFloor));
 }
 
 int Elevator::getMaxFloor() const {
@@ -65,7 +65,7 @@ std::string Elevator::type() const {
 
 void Elevator::outputPosition(const int& timer) const {
 	std::cout << std::endl;
-	std::cout << timer << " : Elevator at Floor " << this->currentFloor;
+	std::cout << "At time " << timer << ", Elevator at Floor " << this->currentFloor << "\nStatus: " << this->status;
 	std::cout << std::endl;
 }
 

@@ -10,6 +10,6 @@ std::string OddElevator::type() const {
 
 void OddElevator::outputPosition(const int& timer) const {
 	std::cout << std::endl;
-	std::cout << timer << " : OddElevator at Floor " << this->currentFloor;
+	std::cout << "At time " << timer << ", OddElevator at Floor " << this->currentFloor << "\nStatus: " << this->status;
 	std::cout << std::endl;
 }

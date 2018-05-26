@@ -7,7 +7,7 @@ public:
 
 	virtual bool availableInFloor(int); // 判断可停靠楼层
 	virtual std::string type() const;
-	virtual void outputPosition(const int& timer) const;
+	virtual void outputPosition(std::ofstream& fout) const;
 
 private:
 

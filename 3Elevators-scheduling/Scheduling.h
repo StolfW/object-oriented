@@ -1,5 +1,6 @@
 #pragma once
 #include "Elevator.h"
+#include <fstream>
 #define RUN Scheduling::getInstance()
 
 class Scheduling {
@@ -19,6 +20,8 @@ public:
 	bool allArrived() const; // 是否完成调度
 	int getArrivalNumber() const;
 	int getPassengerNumber() const;
+
+	void outputPosition(std::ofstream&);
 
 	static int timer;
 	

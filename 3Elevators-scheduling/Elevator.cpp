@@ -63,10 +63,8 @@ std::string Elevator::type() const {
 	return "Elevator";
 }
 
-void Elevator::outputPosition(const int& timer) const {
-	std::cout << std::endl;
-	std::cout << "At time " << timer << ", Elevator at Floor " << this->currentFloor << "\nStatus: " << this->status;
-	std::cout << std::endl;
+void Elevator::outputPosition(std::ofstream& fout) const {
+	fout << "Elevator\t\t" << this->currentFloor;
 }
 
 std::ostream &operator<< (std::ostream &os, const Elevator& ele) {

@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include "Passenger.h"
 
@@ -30,7 +31,7 @@ public:
 
 	virtual bool availableInFloor(int); // 判断可停靠楼层
 	virtual std::string type() const;
-	virtual void outputPosition(const int& timer) const;
+	virtual void outputPosition(std::ofstream& fout) const;
 
 protected:
 	int maxFloor; // 最大楼层

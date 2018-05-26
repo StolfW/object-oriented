@@ -8,8 +8,6 @@ std::string EvenElevator::type() const {
 	return "EvenElevator";
 }
 
-void EvenElevator::outputPosition(const int& timer) const {
-	std::cout << std::endl;
-	std::cout << "At time " << timer << ", EvenElevator at Floor " << this->currentFloor << "\nStatus: " << this->status;
-	std::cout << std::endl;
+void EvenElevator::outputPosition(std::ofstream& fout) const {
+	fout << "EvenElevator\t\t" << this->currentFloor;
 }

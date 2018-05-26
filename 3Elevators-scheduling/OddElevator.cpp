@@ -8,8 +8,6 @@ std::string OddElevator::type() const {
 	return "OddElevator";
 }
 
-void OddElevator::outputPosition(const int& timer) const {
-	std::cout << std::endl;
-	std::cout << "At time " << timer << ", OddElevator at Floor " << this->currentFloor << "\nStatus: " << this->status;
-	std::cout << std::endl;
+void OddElevator::outputPosition(std::ofstream& fout) const {
+	fout << "OddElevator\t\t" << this->currentFloor;
 }

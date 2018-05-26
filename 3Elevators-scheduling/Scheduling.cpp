@@ -198,3 +198,13 @@ int Scheduling::getArrivalNumber() const {
 int Scheduling::getPassengerNumber() const {
 	return this->passengers.size() + this->arrivals.size();
 }
+
+void ::Scheduling::outputPosition(std::ofstream& fout) {
+	fout << timer << "s:\n";
+	for (Elevator* elevator : this->elevators) {
+		elevator->outputPosition(fout);
+		fout << std::endl;
+	}
+	fout << std::endl;
+	fout << std::endl;
+}
